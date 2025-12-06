@@ -1,6 +1,7 @@
 
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
@@ -19,17 +20,21 @@ const TaskSchema = z.object({
 
 type TaskSchemaType = z.infer<typeof TaskSchema>;
 
+import { useNavigate } from "react-router-dom";
+
 const TaskAllocationPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful },
     reset,
   } = useForm<TaskSchemaType>({
     resolver: zodResolver(TaskSchema),
     defaultValues: { priority: "Medium" },
   });
+
+
 
   const onSubmit = (data: TaskSchemaType) => {
     dispatch(
@@ -41,14 +46,36 @@ const TaskAllocationPage: React.FC = () => {
       })
     );
     reset({ pickup: "", drop: "", priority: "Medium", comments: "" });
-    window.alert("Task added to queue!");
+    navigate("/task-queue");
+  };
+
+  const handleBulkCreate = () => {
+    const locations = ["Zone A", "Zone B", "Zone C", "Dock 1", "Dock 2", "Shelf 101", "Shelf 202"];
+    for (let i = 0; i < 5; i++) {
+        const pickup = locations[Math.floor(Math.random() * locations.length)];
+        const drop = locations[Math.floor(Math.random() * locations.length)];
+        const priorities: Array<"Low" | "Medium" | "High"> = ["Low", "Medium", "High"];
+        const priority = priorities[Math.floor(Math.random() * priorities.length)];
+        
+        dispatch(addTask({
+            pickup,
+            drop,
+            priority,
+            comments: "Auto-generated task"
+        }));
+    }
+    navigate("/task-queue");
+  };
+
+  const onError = () => {
+    toast.error("Please fill in all required fields");
   };
 
   return (
     <MainLayout>
       <h1 className="text-2xl font-bold mb-8 text-center">Task Allocation</h1>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit, onError)}
         className="max-w-md w-full mx-auto bg-card p-6 md:p-8 rounded-xl shadow flex flex-col gap-5"
       >
         <div className="flex flex-col gap-2">
@@ -57,9 +84,6 @@ const TaskAllocationPage: React.FC = () => {
             placeholder="Enter pickup point"
             autoComplete="off"
           />
-          {errors.pickup && (
-            <span className="text-xs text-destructive">{errors.pickup.message}</span>
-          )}
         </div>
         <div className="flex flex-col gap-2">
           <label>Drop Location</label>
@@ -67,9 +91,6 @@ const TaskAllocationPage: React.FC = () => {
             placeholder="Enter drop point"
             autoComplete="off"
           />
-          {errors.drop && (
-            <span className="text-xs text-destructive">{errors.drop.message}</span>
-          )}
         </div>
         <div className="flex flex-col gap-2">
           <label>Priority</label>
@@ -81,18 +102,17 @@ const TaskAllocationPage: React.FC = () => {
             <option value="Medium">Medium</option>
             <option value="High">High</option>
           </select>
-          {errors.priority && (
-            <span className="text-xs text-destructive">{errors.priority.message}</span>
-          )}
         </div>
         <div className="flex flex-col gap-2">
           <label>Comments</label>
           <Input {...register("comments")} placeholder="Any additional notes" autoComplete="off" />
         </div>
-        <Button type="submit" className="mt-2">Add Task</Button>
-        {isSubmitSuccessful && (
-          <span className="text-green-600 text-sm pt-2">Task successfully added!</span>
-        )}
+        <div className="flex flex-col gap-3 mt-2">
+            <Button type="submit" className="w-full">Add Task</Button>
+            <Button type="button" variant="outline" className="w-full" onClick={handleBulkCreate}>
+                Generate 5 Random Tasks
+            </Button>
+        </div>
       </form>
     </MainLayout>
   );

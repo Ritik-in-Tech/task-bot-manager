@@ -1,32 +1,15 @@
 
-import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState, AppDispatch } from "../store";
-import { removeTask } from "../slices/tasksSlice";
+import React from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store";
 import MainLayout from "../components/MainLayout";
 
 const TaskQueuePage: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const tasks = useSelector((state: RootState) => state.tasks.tasks);
-  const timer = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    if (tasks.length > 0 && !timer.current) {
-      timer.current = setInterval(() => {
-        dispatch(removeTask());
-      }, 3000);
-    }
-    if (tasks.length === 0 && timer.current) {
-      clearInterval(timer.current);
-      timer.current = null;
-    }
-    return () => {
-      if (timer.current) {
-        clearInterval(timer.current);
-        timer.current = null;
-      }
-    };
-  }, [tasks.length, dispatch]);
+  const tasks = useSelector((state: RootState) => state.tasks.tasks);
+
+
+
 
   return (
     <MainLayout>

@@ -58,9 +58,9 @@ const AnalyticsPage: React.FC = () => {
                   cx="50%"
                   cy="50%"
                   outerRadius={80}
-                  label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                  label={({ value }) => `${value}`}
                 >
-                  {statusPieData.map((entry, i) => (
+                  {statusPieData.map((entry) => (
                     <Cell key={entry.name} fill={BOT_STATUS_COLORS[entry.name as keyof typeof BOT_STATUS_COLORS] || "#aaa"} />
                   ))}
                 </Pie>

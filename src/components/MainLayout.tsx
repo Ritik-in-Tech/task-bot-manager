@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
 import { logout } from "../slices/authSlice";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { to: "/dashboard", label: "Dashboard" },
@@ -58,7 +59,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex flex-col md:flex-row">
       <aside className="hidden md:flex flex-col fixed left-0 top-0 h-screen min-h-screen w-48 bg-sidebar border-r border-sidebar-border p-4 gap-4 justify-between z-20">
         <div>
           <span className="font-bold text-xl mb-6 block text-sidebar-primary">
@@ -159,8 +160,19 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         )}
       </nav>
       {/* Content */}
-      <main className="flex-1 flex flex-col items-center justify-start p-4 md:p-6 transition-all md:ml-48 w-full">
-        <div className="w-full max-w-5xl">{children}</div>
+      <main className="flex-1 flex flex-col items-center justify-start p-4 md:p-8 transition-all md:ml-48 w-full min-h-[calc(100vh-60px)] md:min-h-screen">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={pathname}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="w-full max-w-7xl"
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
       </main>
     </div>
   );

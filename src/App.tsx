@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
@@ -8,8 +8,11 @@ import TaskQueuePage from './pages/TaskQueuePage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import MapPage from './pages/MapPage';
 import AuthGuard from './components/AuthGuard';
+import { useSimulation } from './hooks/useSimulation';
+import { Toaster } from 'sonner';
 
 function App() {
+  useSimulation();
   return (
     <BrowserRouter>
       <Routes>
@@ -24,6 +27,7 @@ function App() {
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <Toaster position="top-center" richColors />
     </BrowserRouter>
   );
 }
