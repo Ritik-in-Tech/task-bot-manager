@@ -2,6 +2,8 @@
 
 A modern, responsive dashboard for managing and simulating warehouse robots. Built with React, Redux Toolkit, and Three.js.
 
+**🚀 Live Demo:** [https://task-bot-manager.vercel.app/](https://task-bot-manager.vercel.app/)
+
 ## 🚀 How to Run the Project
 
 ### Prerequisites
