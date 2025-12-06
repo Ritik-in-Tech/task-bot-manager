@@ -1,10 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './slices/authSlice';
+import botsReducer from './slices/botsSlice';
+import tasksReducer from './slices/tasksSlice';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    // Add bots, tasks, etc. slices here
+    bots: botsReducer,
+    tasks: tasksReducer,
   },
 });
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +7,7 @@ import type { RootState, AppDispatch } from "../store";
 import { loginStart, loginSuccess, loginFailure } from "../slices/authSlice";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+import { useNavigate } from "react-router-dom";
 
 const AuthSchema = z.object({
   username: z.string().min(2, "Required"),
@@ -18,6 +19,13 @@ type AuthSchemaType = z.infer<typeof AuthSchema>;
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const auth = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [auth.isAuthenticated, navigate]);
 
   const {
     register,
@@ -30,7 +38,6 @@ const LoginPage: React.FC = () => {
 
   const onSubmit = (data: AuthSchemaType) => {
     dispatch(loginStart());
-    // Fake async logic for demo purposes
     setTimeout(() => {
       if (data.username && data.password) {
         dispatch(loginSuccess({ username: data.username }));
