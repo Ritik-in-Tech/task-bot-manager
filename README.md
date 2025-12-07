@@ -98,3 +98,5 @@ src/
 -   **Interactive 3D Map**: A realistic warehouse view using Three.js.
 -   **Smooth Animations**: Page transitions and staggered entry animations using Framer Motion.
 -   **User Feedback**: Consolidated toast notifications for form validation.
+## Design
+[Figma Design](https://www.figma.com/design/Cvh4weoGBYPswhtsSTF0Xw/Untitled?node-id=0-1&t=8Dc5grI6sk8r5ivA-1)
